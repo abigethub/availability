@@ -1,0 +1,230 @@
+import java.util.Scanner;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+
+// import org.junit.jupiter.api.Test;
+
+public class Main {
+  //String[] insurances = new String[8];
+  static String[] insurances = {"Anthem (Commercial)","Anthem (Medicaid)","Optima (Commercial)", "Optima (Medicaid)","Tricare","UHC (United Health Care)","Aetna", "Aetna Better Health of VA (Medicaid)","Out of Pocket ONLY", "Out of Pocket"};//put out of pocket here instead
+  static String[] clientType = {"Kids","Adolescents/Teens","Adults", "Families", "Couples", "Reunification", "Coparenting","Spanish","Mediation"};
+  static String[] clinicians = {"Alyssa", "Anaiz", "Autumn", "Caitlin", "Chelsea", "David B", "David W", "Erica", "Halyn", "Heather", "Jessica", "Jordan", "Juan", "Kali", "Kalynn", "Kim M", "Kim F", "Kristy", "Lee", "Margaret","Mary", "Nicole", "Rachel", "Rebecca", "Sam", "Sarah", "Stephanie","Todd"};
+  static String[] spec = {
+    "Kids under 10 and prefers virtual adults",
+    "virtual clients",
+    "",
+    "",
+    "Preference for adolescents and adults, teens only 12+",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Can only take 1-2 more clients prefers adolescents or adults",
+    "Can take 2-3 more clients",
+    "",
+    "Prefers children/adolescents",
+    "",
+    "",
+    "Can take a few",
+    "Can take two adults; one telehealth Tuesdays and one morning availability on Thursdays",
+    "",
+    "",
+    "Adolescents/Teens 13+",
+    "",
+    "",
+    "Only a few",
+    "Can take 1-2 more, preferably kids, only morning availability, no siblings",
+    "",
+    "",
+    "",
+  
+  };
+  static boolean[] seeingNew = {false, true, true, false, true, false, true, false, true, false, true, true, true, true, true, false, true, true, false, true, false, false, false, true, true,false, true, true};
+  static boolean[][] takesIns = {
+    {true, false,true, false,true, true, true, false,false,true},
+    {true, true, true, true, true, false,false,false,false,true},
+    {false,true, false,true, false,false,true, true, false,true},
+    {true, true, true, true, true, true, true, true, false,true},
+    {false,false,false,false,false,false,false,false,true, true},
+    {true, true, true, true, true, true, false,false,false,true},
+    {true, true, true, true, false,true, true, false,false,true},
+    {true, true, true, true, true, true, true, true, false,true},
+    {true, false,true, false,true, true, true, true, false,true},
+    {true, false,true, false,true, false,false,false,false,true},
+    {false,false,false,false,false,false,false,false,true, true},
+    {true, false,true, false,false,false,false,false,false,true},
+    {true, true, true, true, true, true, true, true, false,true},
+    {false,false,false,false,false,false,false,false,true, true},
+    {false,false,false,false,false,false,false,false,true, true},
+    {false,false,false,true, false,false,false,true, false,true},
+    {true, true, true, true, false,true, true, true, false,true},
+    {false,true, false,true, false,false,true, true, false,true},
+    {false,true, false,true, false,false,true, true, false,true},
+    {true, false,true, false,false,false,false,false,false,true},
+    {true, true, true, true, true, true, true, true, false,true},
+    {false,false,true, true, true, true, true, false,false,true},
+    {false,true, false,true, false,false,true, true, false,true},
+    {true, true, true, true, true, true, true, false,false,true},
+    {true, true, true, true, true, true, true, true, false,true},
+    {false,false,true, false, true, true,false,true, false,true},
+    {false,true, false,true, false,false,true, true, false,true},
+    {false,false,false,false,false,false,false,false,false,false},
+  };
+  static boolean[][] seesType = {
+    { true,false, true,false,false,false,false,false,false},
+    { true, true, true,false,false,false,false, true,false},
+    { true, true, true, true, true,false,false,false,false},
+    {false, true, true, true, true,false,false,false,false},
+    {false, true, true,false, true,false,false, true,false},
+    {false, true, true,false,false,false,false,false,false},
+    {false, true, true, true, true,false,false,false,false},
+    { true,false, true,false,false, true, true, true,false},
+    { true, true, true,false,false,false,false,false,false},
+    {false,false, true,false, true,false,false,false,false},
+    {false, true, true, true, true,false,false,false,false},
+    {false, true, true,false,false,false,false,false,false},
+    {false, true, true, true, true,false,false, true,false},
+    { true, true, true, true, true, true, true, true,false},
+    { true, true, true, true, true,false,false,false,false},
+    { true, true, true,false,false,false,false,false,false},
+    {false,false, true,false,false,false,false,false,false},
+    {false,false, true,false,false,false,false,false,false},
+    { true, true, true,false, true, true,false,false,false},
+    {false,false, true,false,false,false,false,false,false},
+    {false, true, true, true, true,false,false,false,false},
+    { true, true, true,false,false,false,false,false,false},
+    { true, true, true,false,false,false,false,false,false},
+    {false,false, true,false,false,false,false,false,false},
+    { true, true, true,false,false,false,false,false,false},
+    {false, true, true,false, true,false,false,false,false},
+    { true, true, true, true, true,false,false,false,false},
+    {false,false,false,false,false,false,false,false, true},
+  };
+  static Scanner scnr = new Scanner(System.in);//System.in
+  static int ins = -1;
+  static int cli = -1;
+  
+  public static void menuPrint(){
+    System.out.println("Which would you like to check?");
+    System.out.println("1) Insurances");
+    System.out.println("2) Client Type");
+    System.out.println("3) Specific Clinicians");
+    //System.out.println("Type -1 to exit");
+  }
+  public static void insuranceChoice(){
+    System.out.println();
+    System.out.println();
+    System.out.println("Which would you like to check?");
+    for(int i =0; i<insurances.length;i++){
+      System.out.println(i+1 + ") " + insurances[i]);
+    }
+    ins = scnr.nextInt()-1;
+    if(cli==-1){clientChoice();}
+    else{
+      results();
+    }
+    
+  }
+  public static void clientChoice(){
+    System.out.println();
+    System.out.println();
+    System.out.println("Which would you like to check?");
+    for(int i = 0; i<clientType.length;i++){
+      System.out.println(i+1 + ") " + clientType[i]);
+    }
+    cli = scnr.nextInt()-1;
+    if(ins==-1){insuranceChoice();}
+    else{
+      results();
+    }
+  }
+  public static void clinicianChoice(){
+    System.out.println();
+    System.out.println();
+    System.out.println("Which would you like to check?");
+    for(int i =0; i<clinicians.length;i++){
+      System.out.println(i+1 + ") " + clinicians[i]);
+    }
+    int c = scnr.nextInt()-1;
+    System.out.println();
+    System.out.println();
+    String maybe = "";
+    if(!seeingNew[c]){maybe="not ";}
+    System.out.println();
+    System.out.println(clinicians[c]+" is "+maybe+"seeing new clients right now\nThey take:");
+    for(int i = 0; i<insurances.length;i++){
+      if(takesIns[c][i]){
+        System.out.print(insurances[i]+"\n");
+      }
+    }
+    System.out.println();
+    System.out.println();
+    System.out.println("They see:");
+    for(int i = 0; i<clientType.length;i++){
+      if(seesType[c][i]){
+        System.out.print(clientType[i]+"\n");
+      }
+    }
+    System.out.println();
+    if(spec[c].equals("")){
+      System.out.println("They have no specifications");
+    }
+    else{
+      System.out.println("Their specifications are: "+spec[c]);
+    }
+    
+  }
+  public static void results(){
+    //maybe double loop like
+    String output = "";
+    for(int i = 0;i<clinicians.length;i++){
+      if(takesIns[i][ins] && seeingNew[i] && seesType[i][cli]){
+        output += clinicians[i]+"\t\t\t"+spec[i]+"\n";
+        //maybe put like if cli==certain type, and i = certain then print specifications
+      }
+    }
+    System.out.println();
+    System.out.println();
+    if(output.equals("")){
+      System.out.println("It looks like no one is available to see "+clientType[cli]+" with "+insurances[ins]+", but you might be able to pay out of pocket to see a different therapist without using insurance");
+    }
+    else{
+      if(cli==4){System.out.println("NOTE: Couples clients cannot use insurance");}
+      System.out.println("These clinicians see " + clientType[cli] + " and take " + insurances[ins]+": ");
+      System.out.println(output);
+    }
+    ins = -1;
+    cli =-1;
+    
+  }
+  public static void main(String[] args) {
+    menuPrint();
+    //maybe change it so scnr.next() before menu so they enter before they do it again perhaps
+    int choice = scnr.nextInt();
+    while(choice!=-1){
+      if(choice==1){
+        insuranceChoice();
+      }
+      else if(choice==2){
+        clientChoice();
+      }
+      else if(choice==3){
+        clinicianChoice();
+      }
+      else {
+        System.out.println("Please choose a valid input");
+      }
+      System.out.println();
+      System.out.println("press any key then enter to see the menu again");
+      scnr.next();
+      System.out.println();
+      menuPrint();
+      choice=scnr.nextInt();
+    }
+  }
+
+  // @Test
+  // void addition() {
+  //     assertEquals(2, 1 + 1);
+  // }
+}
